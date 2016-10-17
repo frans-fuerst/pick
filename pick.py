@@ -135,6 +135,7 @@ class picker:
         pass
 
     def __init__(self, args):
+        self._last_time = time.time()
         self._invert = args.invert
         self._case_insensitive = args.case_insensitive
         # save original and optionally lowercase version of search substrings
@@ -168,6 +169,9 @@ class picker:
         _decoded = line.decode()
         _search_line = _decoded.lower() if self._case_insensitive else _decoded
 
+        _time = time.time()
+        _diff, _last_time = _time - self._last_time, _time
+        self._out.write(("%f %.4d: " % (time.time(), _diff * 1000)).encode())
         for _, p in self._pattern:
             if p in _search_line:
                 if not self._invert:
